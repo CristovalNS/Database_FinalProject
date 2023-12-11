@@ -1,14 +1,15 @@
 from students_function import *
 from lecturer_function import *
+from admin_function import *
 from current_time import *
 import os
 import time
 
 
-
 def intro_screen():
     try:
-        user_role = str(input("\nAre you a student or lecturer?: "))
+        user_role = str(input("\nAre you a student or a lecturer?: "))
+
         if user_role == "student":
             name = str(input("\nPlease enter your full name: "))
             student_data = get_student_name(name)
@@ -20,6 +21,7 @@ def intro_screen():
             else:
                 print("\nStudent not found. Please check your name and try again.")
                 intro_screen()
+
         elif user_role == "lecturer":
             lecturer_name = str(input("\nPlease enter your full name: "))
             lecturer_data = get_lecturer_name(lecturer_name)
@@ -27,7 +29,7 @@ def intro_screen():
             if lecturer_data:
                 lecturer_id = str(input("\nPlease enter your lecturer ID as a password: "))
                 if lecturer_id == str(lecturer_data[0]):  # Assuming lecturer ID is stored as a string
-                    print("\nWelcome, " + lecturer_name + ".")
+                    print(f"Good {greeting}, lecturer. It is currently {TwoFourHrClock}")
                     time.sleep(2)
                     lecturer_menu(lecturer_data[0])  # Pass lecturer_ID to lecturer_menu
                 else:
@@ -36,9 +38,22 @@ def intro_screen():
             else:
                 print("\nLecturer not found. Please check your name and try again.")
                 intro_screen()
+
+        elif user_role == "ADMIN":
+            # admin_password = input("\nEnter the admin password: ")  # You can replace this with your actual admin password logic
+            #
+            # # Check if the admin password is correct
+            # if admin_password == "your_actual_admin_password":
+            admin_menu()
+            # else:
+            #     print("Incorrect admin password. Returning to the main menu.")
+            #     time.sleep(2)
+            #     intro_screen()
+
         else:
             print("\nSeems like you made a mistake. Try again.")
             intro_screen()
+
     except ValueError:
         print("\nSeems like you've made a mistake. Try again.")
         intro_screen()
@@ -47,10 +62,10 @@ def intro_screen():
 def student_menu(student_id):
     while True:
         os.system('cls')
-        print(f"Welcome, Student!")
+        print(f"Student Menu:")
         print("1. Check Grades")
         print("2. Check Information")
-        print("3. Return to Main Menu")
+        print("3. Quit")
 
         choice = input("Enter your choice (1, 2, or 3): ")
 
@@ -66,53 +81,64 @@ def student_menu(student_id):
 
 
 def lecturer_menu(lecturer_id):
-    os.system('cls')
-    print("Good " + greeting + ", lecturer. It is currently " + TwoFourHrClock)
-    print("\
-\nWelcome to the Ouval Academy Database. \n\
-For general information and usage, use the word HELP.\n\
-To access administrator data, use the word ADMIN and enter the administrator password.\n\
-                \n\
---------------------------------------------------------------\n")
-    user_action = str(input("Awaiting Input... ")).lower()
-
-    if user_action == "students".casefold():
-        view_courses(lecturer_id)
-
-    if user_action == "help":
-        help_menu(lecturer_id)
-    elif user_action == "admin":
+    while True:
         os.system('cls')
-        print("no.")
-        time.sleep(2.25)
-        lecturer_menu(lecturer_id)
-    else:
-        time.sleep(2.25)
-        lecturer_menu(lecturer_id)
+        print("Lecturer Menu:")
+        print("1. View Courses")
+        print("2. Edit Mode")
+        print("3. Quit")
+
+        user_action = input("Enter your choice (1, 2, or 3): ").lower()
+
+        if user_action == "1":
+            view_courses(lecturer_id)
+        elif user_action == "2":
+            edit_mode(lecturer_id)
+        elif user_action == "3":
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+            time.sleep(2)
 
 
-def help_menu(lecturer_id):
-    
-    os.system('cls')
-    print("Good " + greeting + ", lecturer. It is currently " + TwoFourHrClock + "\n")
-    
-    print(">STUDENTS\n\
-To see the list of current students.\n")
-    
-    print(">EDIT\n\
-To edit student data.\n")
+def admin_menu():
+    while True:
+        os.system('cls')
+        print("Admin Menu:")
+        print("1. Add Course")
+        print("2. Delete Course")
+        print("3. Add Student")
+        print("4. Remove Student")
+        print("5. Add Student to Course")
+        print("6. Delete Student from Course")
+        print("7. Add Lecturer")
+        print("8. Assign Course to Lecturer")
+        print("9. Remove Lecturer")
+        print("10. Quit")
 
-    print(">MENU\n\
-Return to the menu.\n")
-    
-    user_input = str(input("Awaiting user input... ")).lower()
-    
-    if user_input == "students":
-        view_courses(lecturer_id)
-    elif user_input == "gamerec":
-        print("Valorant")
-    elif user_input == "quit":
-        exit()               
-    else:
-        print("feature under construction/not working rn, try again.")
-        help_menu(lecturer_id)
+        admin_action = input("Enter your choice (1-9): ").lower()
+
+        if admin_action == "1":
+            add_course()
+        elif admin_action == "2":
+            delete_course()
+        elif admin_action == "3":
+            add_student()
+        elif admin_action == "4":
+            remove_student()
+        elif admin_action == "5":
+            add_student_to_course()
+        elif admin_action == "6":
+            delete_student_from_course()
+        elif admin_action == "7":
+            add_lecturer()
+        elif admin_action == "8":
+            assign_course_to_lecturer()
+        elif admin_action == "9":
+            remove_lecturer()
+        elif admin_action == "10":
+            break
+        else:
+            print("Invalid choice. Please enter a valid option (1-10).")
+            time.sleep(2)
+

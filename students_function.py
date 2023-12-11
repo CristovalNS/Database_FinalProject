@@ -1,4 +1,4 @@
-from getter_functions import *
+from sql_queries import *
 
 
 def display_student_grades_from_db(student_id):
